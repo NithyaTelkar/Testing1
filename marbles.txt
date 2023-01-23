@@ -1,0 +1,85 @@
+package Marbles;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Marbles 
+{
+	public static void main(String[] args) {
+		   System.setProperty("webdriver.chrome.driver", "C:\\Drivers\\chromedriver_win32 (2)\\chromedriver.exe");
+	        WebDriver driver=new ChromeDriver();
+	        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+	        
+	        driver.get("https://jam.sasken.com/");
+             driver.findElement(By.xpath("//span[contains(text(),'Myapps')]")).click();
+             driver.findElement(By.xpath("//a[contains(text(),'Virtual Marbles')]")).click();
+             
+             String url = driver. getCurrentUrl();
+             System.out.println(driver.getWindowHandles().size());
+             System.out.println(url);
+             
+             java.util.Set<String> windowIds=driver.getWindowHandles();
+             Iterator<String> Iterator=((java.util.Set<String>) windowIds).iterator();
+             List<String> a1=new ArrayList<String>();
+             while(Iterator.hasNext()) {
+                 a1.add(Iterator.next());
+             }
+             
+             driver.switchTo().window(a1.get(1));
+             String url1 = driver. getCurrentUrl();
+             System.out.println(url1);
+             
+             driver.findElement(By.xpath("//a[contains(text(),'Query')]")).click();
+             driver.findElement(By.cssSelector("#ContentPlaceHolder1_rdbtnSearch_1")).click();
+             
+             Scanner sc = new Scanner(System.in);
+             HashMap<String,Integer> hm1 = new HashMap<String,Integer>();
+             HashMap<String,Integer> hm2 = new HashMap<String,Integer>();
+             
+             System.out.println("Enter the Employee ID");
+             for(int i =0;i<5;i++)
+             {
+            	 String ID=sc.nextLine();
+          
+             driver.findElement(By.cssSelector("#ContentPlaceHolder1_txtsearchEmplID")).sendKeys(ID);
+             driver.findElement(By.cssSelector("#ContentPlaceHolder1_txtsearchEmplID")).sendKeys(Keys.ENTER);
+             
+             String earned = driver.findElement(By.cssSelector("#ContentPlaceHolder1_lblDearEarned")).getText();
+             int earned1 = Integer.parseInt(earned);
+             hm1.put(ID, earned1);
+             
+             String given = driver.findElement(By.cssSelector("#ContentPlaceHolder1_lblDearGiven")).getText();
+             int given1 = Integer.parseInt(given);
+             hm2.put(ID,given1);
+             
+             driver.findElement(By.cssSelector("#ContentPlaceHolder1_txtsearchEmplID")).clear();
+          
+             }
+             System.out.println(hm1);
+             System.out.println(hm2);
+             
+             int count=0;
+             for(Map.Entry<String,Integer> earnedcount: hm1.entrySet()) {
+            	 if(count<earnedcount.getValue()) {
+            		 count=earnedcount.getValue();
+            	 }
+             }
+             System.out.println("The higest count of the earned marble is:" +count);
+             
+             int count1=0;
+             for(Map.Entry<String,Integer> givencount: hm2.entrySet()) {
+            	 if(count1<givencount.getValue()) {
+            		 count1=givencount.getValue();
+            	 }
+             }
+             System.out.println("The highest count of the given marbles is :"+count1);
+}
+}
